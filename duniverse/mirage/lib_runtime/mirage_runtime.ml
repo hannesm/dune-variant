@@ -22,44 +22,7 @@ let s_log = "LOG AND MONITORING OPTIONS"
 let s_disk = "DISK OPTIONS"
 let s_ocaml = "OCAML RUNTIME OPTIONS"
 
-type log_threshold = [ `All | `Src of string ] * Logs.level option
-
-let set_level ~default l =
-  let srcs = Logs.Src.list () in
-  let default =
-    try snd @@ List.find (function `All, _ -> true | _ -> false) l
-    with Not_found -> default
-  in
-  Logs.set_level default;
-  List.iter
-    (function
-      | `All, _ -> ()
-      | `Src src, level -> (
-          try
-            let s = List.find (fun s -> Logs.Src.name s = src) srcs in
-            Logs.Src.set_level s level
-          with Not_found ->
-            Format.printf "WARNING: %s is not a valid log source.\n%!" src))
-    l
-
 module Conv = struct
-  let log_threshold =
-    let parser str =
-      let level src s =
-        Result.bind (Logs.level_of_string s) (fun l -> Ok (src, l))
-      in
-      match String.split_on_char ':' str with
-      | [ _ ] -> level `All str
-      | [ "*"; lvl ] -> level `All lvl
-      | [ src; lvl ] -> level (`Src src) lvl
-      | _ -> Error (`Msg ("Can't parse log threshold: " ^ str))
-    in
-    let serialize ppf = function
-      | `All, l -> Format.pp_print_string ppf (Logs.level_to_string l)
-      | `Src s, l -> Format.fprintf ppf "%s:%s" s (Logs.level_to_string l)
-    in
-    Arg.conv (parser, serialize)
-
   let allocation_policy, allocation_policy_doc_alts =
     let enum =
       [
@@ -190,18 +153,6 @@ let custom_minor_max_size =
       [ "custom-minor-max-size" ]
   in
   Arg.(value & opt (some int) None doc)
-
-let logs =
-  let docs = s_log in
-  let logs = Arg.list Conv.log_threshold in
-  let doc =
-    "Be more or less verbose. $(docv) must be of the form \
-     $(b,*:info,foo:debug) means that that the log threshold is set to \
-     $(b,info) for every log sources but the $(b,foo) which is set to \
-     $(b,debug)."
-  in
-  let doc = Arg.info ~docv:"LEVEL" ~doc ~docs [ "l"; "logs" ] in
-  Arg.(value & opt logs [] doc)
 
 (** {3 Blocks} *)
 

@@ -20,23 +20,8 @@ open Cmdliner
 
     {e Release %%VERSION%%} *)
 
-(** {2 Log thresholds} *)
-
-type log_threshold = [ `All | `Src of string ] * Logs.level option
-(** The type for log threshold. A log level of [None] disables logging. *)
-
-val set_level : default:Logs.level option -> log_threshold list -> unit
-(** [set_level ~default l] set the log levels needed to have all of the log
-    sources appearing in [l] be used. *)
-
-val logs : log_threshold list Term.t
-(** [logs] is a command-liner term for setting the log_threshold. *)
-
 (** {2 Command-line converters} *)
 module Conv : sig
-  val log_threshold : log_threshold Cmdliner.Arg.conv
-  (** [log_threshold] converts log reporter threshold. *)
-
   val allocation_policy :
     [ `Next_fit | `First_fit | `Best_fit ] Cmdliner.Arg.conv
   (** [allocation_policy] converts allocation policy. *)
