@@ -1,6 +1,0 @@
-(cram
- (package mirage)
- (deps
-  unikernel.opam
-  (source_tree mini-opam-overlays/)
-  (source_tree mini-opam-repository/)))

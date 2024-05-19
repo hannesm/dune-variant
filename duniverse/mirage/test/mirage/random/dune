@@ -1,7 +1,0 @@
-(cram
- (deps
-  config.ml
-  (package mirage))
- (enabled_if
-  (<> %{architecture} "i386"))
- (package mirage))

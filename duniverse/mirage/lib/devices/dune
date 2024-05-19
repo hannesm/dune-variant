@@ -1,4 +1,0 @@
-(library
- (name devices)
- (public_name mirage.devices)
- (libraries mirage.functoria))

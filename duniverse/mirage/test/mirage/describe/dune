@@ -1,8 +1,0 @@
-(executable
- (name config)
- (modules config)
- (libraries mirage))
-
-(cram
- (package mirage)
- (deps config.exe))
