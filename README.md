@@ -50,6 +50,41 @@ _build/solo5/duniverse/mirage-time/src.
 -> required by alias dist/default (context solo5)
 ```
 
+## Re-add "(optional)" to duniverse/mirage-bootvar/solo5/dune
+
+This leads to the original issue reported in https://github.com/ocaml/dune/issues/10460
+
+```
+File "dune.build", line 13, characters 40-60:
+13 |  (libraries duration lwt mirage-bootvar mirage-bootvar.solo5
+                                             ^^^^^^^^^^^^^^^^^^^^
+Error: Library "mirage-bootvar.solo5" in
+_build/solo5/duniverse/mirage-bootvar/solo5 is hidden (optional with
+unavailable dependencies).
+-> required by _build/solo5/main.exe
+-> required by alias all (context solo5)
+-> required by alias default (context solo5)
+```
+
+## Removing "(optional)" from both duniverse/mirage-bootvar/solo5/dune and duniverse/mirage-time/solo5/dune
+
+Leads to same issue:
+
+```
+File "duniverse/mirage-time/unix/dune", line 5, characters 12-20:
+5 |  (libraries lwt.unix duration))
+                ^^^^^^^^
+Error: Library "lwt.unix" not found.
+-> required by library "mirage-time.unix" in
+   _build/solo5/duniverse/mirage-time/unix
+-> required by library "mirage-bootvar.solo5" in
+   _build/solo5/duniverse/mirage-bootvar/solo5
+-> required by executable main in dune.build:11
+-> required by _build/solo5/main.exe
+-> required by alias all (context solo5)
+-> required by alias default (context solo5)
+```
+
 ## Dirty fix
 
 Change in `duniverse/mirage-time/src/dune` the
