@@ -1,5 +1,0 @@
-(library
- (name dune_patch)
- (libraries stdune fiber dune_engine dune_lang dune_re)
- (instrumentation
-  (backend bisect_ppx)))

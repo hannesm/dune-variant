@@ -1,3 +1,0 @@
-(cram
- (deps helpers.sh)
- (applies_to :whole_subtree))

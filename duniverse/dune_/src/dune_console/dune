@@ -1,5 +1,0 @@
-(library
- (name dune_console)
- (libraries stdune)
- (instrumentation
-  (backend bisect_ppx)))
