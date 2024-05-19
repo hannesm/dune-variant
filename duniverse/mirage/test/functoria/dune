@@ -1,0 +1,4 @@
+(test
+ (name test)
+ (package mirage)
+ (libraries mirage.functoria alcotest cmdliner rresult astring))

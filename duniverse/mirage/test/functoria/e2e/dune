@@ -1,0 +1,23 @@
+(executable
+ (name test)
+ (modules test)
+ (libraries e2e alcotest cmdliner rresult astring))
+
+(executable
+ (name help)
+ (modules help)
+ (libraries astring fmt))
+
+(cram
+ (deps
+  test.exe
+  help.exe
+  (source_tree app)
+  (source_tree lib)
+  (source_tree errors)
+  (source_tree context)
+  (package mirage)
+  (package mirage-runtime))
+ (enabled_if
+  (<> %{architecture} "i386"))
+ (package mirage))

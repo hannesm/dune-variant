@@ -1,0 +1,19 @@
+(include_subdirs no)
+
+(library
+ (name functoria)
+ (public_name mirage.functoria)
+ (libraries
+  uri
+  emile
+  unix
+  cmdliner
+  rresult
+  fmt
+  astring
+  fpath
+  bos
+  fmt.cli
+  logs.fmt
+  fmt.tty
+  logs.cli))

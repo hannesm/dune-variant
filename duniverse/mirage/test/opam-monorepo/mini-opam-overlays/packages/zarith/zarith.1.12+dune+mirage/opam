@@ -1,0 +1,10 @@
+opam-version: "2.0"
+depends: ["dune" "gmp"]
+dev-repo: "zarith"
+url {
+  src: "https://github.com/ocaml/zarith.git"
+}
+tags: [ "cross-compile" ]
+build: [
+  ["dune" "build"]
+]
