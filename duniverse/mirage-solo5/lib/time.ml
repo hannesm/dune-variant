@@ -46,16 +46,6 @@ let sleep_queue =
   in
   SleepQueue.create ~dummy 0
 
-let sleep_metrics =
-  let open Metrics in
-  let doc = "Sleep queue size" in
-  let data () =
-    let q_size = SleepQueue.length sleep_queue in
-    Data.v [ uint "sleep queue size" q_size ]
-  in
-  Src.v ~doc ~tags:Metrics.Tags.[] ~data "sleep"
-
-let m () = Metrics.add sleep_metrics (fun x -> x) (fun d -> d ())
 let in_the_past now t = t = 0L || t <= now ()
 
 let rec restart_threads now =
@@ -63,11 +53,9 @@ let rec restart_threads now =
   | exception Binary_heap.Empty -> ()
   | { canceled = true; _ } ->
       SleepQueue.remove sleep_queue;
-      m ();
       restart_threads now
   | { time; thread; _ } when in_the_past now time ->
       SleepQueue.remove sleep_queue;
-      m ();
       Lwt.wakeup thread ();
       restart_threads now
   | _ -> ()
@@ -81,7 +69,6 @@ let rec get_next_timeout () =
   | exception Binary_heap.Empty -> None
   | { canceled = true; _ } ->
       SleepQueue.remove sleep_queue;
-      m ();
       get_next_timeout ()
   | { time; _ } -> Some time
 
@@ -91,5 +78,4 @@ let select_next () =
   List.iter
     (fun e -> SleepQueue.add sleep_queue e)
     (Mirage_time.new_sleepers ());
-  m ();
   get_next_timeout ()
